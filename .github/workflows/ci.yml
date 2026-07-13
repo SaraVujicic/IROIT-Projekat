@@ -36,7 +36,7 @@ jobs:
       run: |
         docker compose -f backend/docker-compose.yml up -d
         # Wait for infrastructure to spin up
-        sleep 15
+        sleep 30
 
     - name: Install SonarScanner for .NET
       run: |
@@ -74,6 +74,10 @@ jobs:
         dotnet build backend/ApiGateway/ApiGateway.csproj --no-restore -c Release
 
     - name: Run Backend Unit & Integration Tests
+      env:
+        # Menjamo host iz "postgres" u "127.0.0.1" (localhost) za vreme testiranja na GitHub Actions virtuelnoj masini
+        ConnectionStrings__DefaultConnection: "Host=127.0.0.1;Port=5432;Database=DepartmentDb;Username=postgres;Password=postgres"
+        ConnectionStrings__PostgresConnection: "Host=127.0.0.1;Port=5432;Database=DepartmentDb;Username=postgres;Password=postgres"
       run: |
         dotnet test backend/AbsenceService/Absence.slnx --no-build -c Release
         dotnet test backend/DepartmentService/DepartmentService.sln --no-build -c Release
