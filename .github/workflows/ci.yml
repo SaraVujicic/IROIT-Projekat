@@ -33,10 +33,10 @@ jobs:
         node-version: '20'
 
     - name: Start Docker Compose Infrastructure
-      run: |
-        docker compose -f backend/docker-compose.yml up -d postgres rabbitmq jaeger prometheus grafana
-        # Wait for RabbitMQ and DBs to be healthy
-        sleep 10
+  run: |
+    docker compose -f backend/docker-compose.yml up -d
+    # Wait for infrastructure to spin up
+    sleep 15
 
     - name: Install SonarScanner for .NET
       run: |
