@@ -1,0 +1,44 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  - job_name: 'apigateway'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['apigateway:8080']
+
+  - job_name: 'absenceservice'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['absenceservice:8080']
+
+  - job_name: 'departmentservice'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['departmentservice:8080']
+
+  - job_name: 'employeeservice'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['employeeservice:8080']
+
+  - job_name: 'leavebalanceservice'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['leavebalanceservice:8080']
+
+  - job_name: 'notificationservice'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['notificationservice:8080']
+
+  - job_name: 'requestservice'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['requestservice:8080']
+
+  - job_name: 'rabbitmq'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['rabbitmq:15692']

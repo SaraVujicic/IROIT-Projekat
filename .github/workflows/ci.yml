@@ -1,0 +1,119 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main, dev, '*feature*' ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      # We can also spin up Postgres and RabbitMQ directly using GitHub Actions services, 
+      # or run them via docker-compose as requested.
+      # We'll use docker-compose to start postgres and rabbitmq containers, and shut them down.
+      
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+    - name: Set up JDK 17 (Required for SonarCloud)
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
+    - name: Set up .NET Core SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Start Docker Compose Infrastructure
+      run: |
+        docker compose -f backend/docker-compose.yml up -d postgres rabbitmq jaeger prometheus grafana
+        # Wait for RabbitMQ and DBs to be healthy
+        sleep 10
+
+    - name: Install SonarScanner for .NET
+      run: |
+        dotnet tool install --global dotnet-sonarscanner
+
+    - name: Restore Backend Dependencies
+      run: |
+        dotnet restore backend/AbsenceService/Absence.slnx
+        dotnet restore backend/DepartmentService/DepartmentService.sln
+        dotnet restore backend/EmployeeService/EmployeeManagement.sln
+        dotnet restore backend/LeaveBalanceService/LeaveBalanceService.sln
+        dotnet restore backend/NotificationService/NotificationService.sln
+        dotnet restore backend/RequestService/RequestService.sln
+        dotnet restore backend/ApiGateway/ApiGateway.csproj
+
+    - name: Begin SonarCloud Analysis
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        if [ ! -z "$SONAR_TOKEN" ]; then
+          dotnet-sonarscanner begin /k:"uris-tim5-project" /o:"uris-tim5" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.qualitygate.wait=true
+        else
+          echo "SONAR_TOKEN is not set. Skipping SonarScanner begin."
+        fi
+
+    - name: Build Backend Microservices
+      run: |
+        dotnet build backend/AbsenceService/Absence.slnx --no-restore -c Release
+        dotnet build backend/DepartmentService/DepartmentService.sln --no-restore -c Release
+        dotnet build backend/EmployeeService/EmployeeManagement.sln --no-restore -c Release
+        dotnet build backend/LeaveBalanceService/LeaveBalanceService.sln --no-restore -c Release
+        dotnet build backend/NotificationService/NotificationService.sln --no-restore -c Release
+        dotnet build backend/RequestService/RequestService.sln --no-restore -c Release
+        dotnet build backend/ApiGateway/ApiGateway.csproj --no-restore -c Release
+
+    - name: Run Backend Unit & Integration Tests
+      run: |
+        dotnet test backend/AbsenceService/Absence.slnx --no-build -c Release
+        dotnet test backend/DepartmentService/DepartmentService.sln --no-build -c Release
+        dotnet test backend/EmployeeService/EmployeeManagement.sln --no-build -c Release
+        dotnet test backend/LeaveBalanceService/LeaveBalanceService.sln --no-build -c Release
+        dotnet test backend/NotificationService/NotificationService.sln --no-build -c Release
+        dotnet test backend/RequestService/RequestService.sln --no-build -c Release
+
+    - name: End SonarCloud Analysis
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        if [ ! -z "$SONAR_TOKEN" ]; then
+          dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        else
+          echo "SONAR_TOKEN is not set. Skipping SonarScanner end."
+        fi
+
+    - name: Install Frontend Dependencies
+      run: |
+        cd frontend
+        npm ci
+
+    - name: Lint Frontend Code
+      run: |
+        cd frontend
+        npm run lint
+
+    - name: Build Frontend Application
+      run: |
+        cd frontend
+        npm run build
+
+    - name: Tear Down Docker Compose Infrastructure
+      if: always()
+      run: |
+        docker compose -f backend/docker-compose.yml down -v

@@ -1,0 +1,6 @@
+{
+  "DepartmentService.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\Jovana\\Desktop\\URIS\\backend\\DepartmentService\\DepartmentService.API",
+  "DepartmentService.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\Jovana\\Desktop\\URIS\\backend\\DepartmentService\\DepartmentService.Application",
+  "DepartmentService.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\Jovana\\Desktop\\URIS\\backend\\DepartmentService\\DepartmentService.Domain",
+  "DepartmentService.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\Jovana\\Desktop\\URIS\\backend\\DepartmentService\\DepartmentService.Infrastructure"
+}

@@ -1,0 +1,6 @@
+{
+  "NotificationService.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\Win10\\Desktop\\URIS\\backend\\NotificationService\\NotificationService.API",
+  "NotificationService.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\Win10\\Desktop\\URIS\\backend\\NotificationService\\NotificationService.Application",
+  "NotificationService.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\Win10\\Desktop\\URIS\\backend\\NotificationService\\NotificationService.Domain",
+  "NotificationService.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\Win10\\Desktop\\URIS\\backend\\NotificationService\\NotificationService.Infrastructure"
+}

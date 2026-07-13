@@ -1,0 +1,334 @@
+version: '3.8'
+
+services:
+  # -------------------------
+  # API GATEWAY
+  # -------------------------
+  apigateway:
+    image: apigateway
+    build:
+      context: ./ApiGateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - microservices-net
+    depends_on:
+      requestservice:
+        condition: service_started
+      employeeservice:
+        condition: service_started
+      departmentservice:
+        condition: service_started
+      leavebalanceservice:
+        condition: service_started
+      notificationservice:
+        condition: service_started
+      absenceservice:
+        condition: service_started
+      jaeger:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  # -------------------------
+  # MICROSERVICES
+  # -------------------------
+  requestservice:
+    image: requestservice
+    build:
+      context: ./RequestService
+      dockerfile: Dockerfile
+    networks:
+      - microservices-net
+    depends_on:
+      request-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      jaeger:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  employeeservice:
+    image: employeeservice
+    build:
+      context: ./EmployeeService
+      dockerfile: Dockerfile
+    networks:
+      - microservices-net
+    depends_on:
+      employee-db:
+        condition: service_healthy
+      jaeger:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  departmentservice:
+    image: departmentservice
+    build:
+      context: ./DepartmentService
+      dockerfile: DepartmentService.API/Dockerfile
+    networks:
+      - microservices-net
+    depends_on:
+      department-db:
+        condition: service_healthy
+      jaeger:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  leavebalanceservice:
+    image: leavebalanceservice
+    build:
+      context: ./LeaveBalanceService
+      dockerfile: Dockerfile
+    networks:
+      - microservices-net
+    depends_on:
+      leavebalance-db:
+        condition: service_healthy
+      jaeger:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  notificationservice:
+    image: notificationservice
+    build:
+      context: ./NotificationService
+      dockerfile: Dockerfile
+    networks:
+      - microservices-net
+    depends_on:
+      notification-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      jaeger:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  absenceservice:
+    image: absenceservice
+    build:
+      context: ./AbsenceService
+      dockerfile: Dockerfile
+    networks:
+      - microservices-net
+    depends_on:
+      absence-db:
+        condition: service_healthy
+      jaeger:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  # -------------------------
+  # POSTGRES DATABASES
+  # -------------------------
+  request-db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: RequestDb
+    networks:
+      - microservices-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d RequestDb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  employee-db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: EmployeeDb
+    networks:
+      - microservices-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d EmployeeDb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  department-db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: DepartmentDb
+    networks:
+      - microservices-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d DepartmentDb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  leavebalance-db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: LeaveBalanceDb
+    networks:
+      - microservices-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d LeaveBalanceDb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  notification-db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: NotificationDb
+    networks:
+      - microservices-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d NotificationDb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  absence-db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: AbsenceDb
+    networks:
+      - microservices-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d AbsenceDb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  # -------------------------
+  # INFRASTRUCTURE & MONITORING
+  # -------------------------
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "15692:15692"
+    networks:
+      - microservices-net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: always
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+    networks:
+      - microservices-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:16686 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: always
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - microservices-net
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9090/-/healthy"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: always
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./monitoring/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/dashboards:/etc/grafana/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - microservices-net
+    depends_on:
+      prometheus:
+        condition: service_healthy
+      jaeger:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: always
+
+networks:
+  microservices-net:
+    driver: bridge

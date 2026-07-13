@@ -1,0 +1,16 @@
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Application\bin\Debug\net8.0\NotificationService.Application.deps.json
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Application\bin\Debug\net8.0\NotificationService.Application.dll
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Application\bin\Debug\net8.0\NotificationService.Application.pdb
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Application\bin\Debug\net8.0\NotificationService.Domain.dll
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Application\bin\Debug\net8.0\NotificationService.Domain.pdb
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Application\obj\Debug\net8.0\NotificationService.Application.csproj.AssemblyReference.cache
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Application\obj\Debug\net8.0\NotificationService.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Application\obj\Debug\net8.0\NotificationService.Application.AssemblyInfoInputs.cache
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Application\obj\Debug\net8.0\NotificationService.Application.AssemblyInfo.cs
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Application\obj\Debug\net8.0\NotificationService.Application.csproj.CoreCompileInputs.cache
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Application\obj\Debug\net8.0\NotificationService.Application.dll
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Application\obj\Debug\net8.0\refint\NotificationService.Application.dll
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Application\obj\Debug\net8.0\NotificationService.Application.pdb
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Application\obj\Debug\net8.0\ref\NotificationService.Application.dll
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Application\obj\Debug\net8.0\NotificationService.Application.sourcelink.json
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Application\obj\Debug\net8.0\NotificationService.Application.csproj.CopyComplete

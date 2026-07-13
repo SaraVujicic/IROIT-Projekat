@@ -1,0 +1,12 @@
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Domain\bin\Debug\net8.0\NotificationService.Domain.deps.json
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Domain\bin\Debug\net8.0\NotificationService.Domain.dll
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Domain\bin\Debug\net8.0\NotificationService.Domain.pdb
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Domain\obj\Debug\net8.0\NotificationService.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Domain\obj\Debug\net8.0\NotificationService.Domain.AssemblyInfoInputs.cache
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Domain\obj\Debug\net8.0\NotificationService.Domain.AssemblyInfo.cs
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Domain\obj\Debug\net8.0\NotificationService.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Domain\obj\Debug\net8.0\NotificationService.Domain.dll
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Domain\obj\Debug\net8.0\refint\NotificationService.Domain.dll
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Domain\obj\Debug\net8.0\NotificationService.Domain.pdb
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Domain\obj\Debug\net8.0\ref\NotificationService.Domain.dll
+C:\Users\Win10\Desktop\URIS\backend\NotificationService\NotificationService.Domain\obj\Debug\net8.0\NotificationService.Domain.sourcelink.json

@@ -1,0 +1,28 @@
+﻿<Properties StartupConfiguration="{ACCC73D5-9867-443B-B6A0-C9AC913C4C2B}|Default">
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.DepartmentService.Tests PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="DepartmentService.API/appsettings.json">
+    <Files>
+      <File FileName="DepartmentService.API/appsettings.json" Line="10" Column="109" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="DepartmentService" expanded="True">
+            <Node name="DepartmentService.API" expanded="True">
+              <Node name="appsettings.json" selected="True" />
+            </Node>
+            <Node name="DepartmentService.Application" expanded="True" />
+            <Node name="DepartmentService.Domain" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.DepartmentService.API PreferredExecutionTarget="/Applications/Google Chrome.app" />
+</Properties>

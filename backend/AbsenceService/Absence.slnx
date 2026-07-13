@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Absence.Api/Absence.Api.csproj" />
+    <Project Path="src/Absence.Application/Absence.Application.csproj" />
+    <Project Path="src/Absence.Domain/Absence.Domain.csproj" />
+    <Project Path="src/Absence.Infrastructure/Absence.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Absence.Api.IntegrationTests/Absence.Api.IntegrationTests.csproj" />
+    <Project Path="tests/Absence.Domain.Tests/Absence.Domain.Tests.csproj" />
+  </Folder>
+</Solution>

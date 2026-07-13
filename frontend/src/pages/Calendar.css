@@ -1,0 +1,161 @@
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.calendar-card {
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.calendar-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.calendar-navigation {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.weekday-header {
+  padding: 0.5rem;
+}
+
+.calendar-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  min-height: 400px;
+}
+
+.calendar-day {
+  min-height: 100px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.calendar-day.empty {
+  background: transparent;
+  border: none;
+}
+
+.day-number {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  align-self: flex-end;
+}
+
+.day-events {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  overflow: hidden;
+}
+
+.day-event {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: white;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.event-title-text {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* Event types colors */
+.event-leave {
+  background: rgba(16, 185, 129, 0.3) !important;
+  border-left: 3px solid #10b981;
+}
+
+.event-sick {
+  background: rgba(239, 68, 68, 0.3) !important;
+  border-left: 3px solid #ef4444;
+}
+
+.event-dayoff {
+  background: rgba(245, 158, 11, 0.3) !important;
+  border-left: 3px solid #f59e0b;
+}
+
+.event-travel {
+  background: rgba(59, 130, 246, 0.3) !important;
+  border-left: 3px solid #3b82f6;
+}
+
+.event-internship {
+  background: rgba(139, 92, 246, 0.3) !important;
+  border-left: 3px solid #8b5cf6;
+}
+
+.event-education {
+  background: rgba(236, 72, 153, 0.3) !important;
+  border-left: 3px solid #ec4899;
+}
+
+.calendar-legend {
+  padding: 1.5rem;
+  border-radius: 12px;
+}
+
+.calendar-legend h4 {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+}
+
+.legend-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+}
