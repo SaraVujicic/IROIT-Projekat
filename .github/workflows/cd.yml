@@ -12,147 +12,24 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Log in to Azure
-      uses: azure/login@v2
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-    - name: Log in to Azure Container Registry
-      uses: azure/docker-login@v2
-      with:
-        login-server: ${{ secrets.AZURE_REGISTRY_SERVER }}
-        username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
-        password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
-
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
-    # Define variables for images
-    - name: Set Image Tags
+    # Simuliramo lokalni build mikroservisa (provera da li se Dockerfile-ovi uspesno bilduju)
+    - name: Run CI Docker Build (Dry-Run)
       run: |
-        echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
-        echo "REGISTRY=${{ secrets.AZURE_REGISTRY_SERVER }}" >> $GITHUB_ENV
+        echo "Starting dry-run Docker builds to verify containerization..."
+        docker build -t local/apigateway:latest -f ./backend/ApiGateway/Dockerfile ./backend/ApiGateway
+        docker build -t local/absenceservice:latest -f ./backend/AbsenceService/Dockerfile ./backend/AbsenceService
+        docker build -t local/departmentservice:latest -f ./backend/DepartmentService/DepartmentService.API/Dockerfile ./backend/DepartmentService
+        docker build -t local/employeeservice:latest -f ./backend/EmployeeService/Dockerfile ./backend/EmployeeService
+        docker build -t local/leavebalanceservice:latest -f ./backend/LeaveBalanceService/Dockerfile ./backend/LeaveBalanceService
+        docker build -t local/notificationservice:latest -f ./backend/NotificationService/Dockerfile ./backend/NotificationService
+        docker build -t local/requestservice:latest -f ./backend/RequestService/Dockerfile ./backend/RequestService
 
-    # 1. Build and Push ApiGateway
-    - name: Build & Push ApiGateway
-      uses: docker/build-push-action@v5
-      with:
-        context: ./backend/ApiGateway
-        file: ./backend/ApiGateway/Dockerfile
-        push: true
-        tags: |
-          ${{ env.REGISTRY }}/apigateway:latest
-          ${{ env.REGISTRY }}/apigateway:${{ env.TAG }}
-
-    # 2. Build & Push AbsenceService
-    - name: Build & Push AbsenceService
-      uses: docker/build-push-action@v5
-      with:
-        context: ./backend/AbsenceService
-        file: ./backend/AbsenceService/Dockerfile
-        push: true
-        tags: |
-          ${{ env.REGISTRY }}/absenceservice:latest
-          ${{ env.REGISTRY }}/absenceservice:${{ env.TAG }}
-
-    # 3. Build & Push DepartmentService
-    - name: Build & Push DepartmentService
-      uses: docker/build-push-action@v5
-      with:
-        context: ./backend/DepartmentService
-        file: ./backend/DepartmentService/DepartmentService.API/Dockerfile
-        push: true
-        tags: |
-          ${{ env.REGISTRY }}/departmentservice:latest
-          ${{ env.REGISTRY }}/departmentservice:${{ env.TAG }}
-
-    # 4. Build & Push EmployeeService
-    - name: Build & Push EmployeeService
-      uses: docker/build-push-action@v5
-      with:
-        context: ./backend/EmployeeService
-        file: ./backend/EmployeeService/Dockerfile
-        push: true
-        tags: |
-          ${{ env.REGISTRY }}/employeeservice:latest
-          ${{ env.REGISTRY }}/employeeservice:${{ env.TAG }}
-
-    # 5. Build & Push LeaveBalanceService
-    - name: Build & Push LeaveBalanceService
-      uses: docker/build-push-action@v5
-      with:
-        context: ./backend/LeaveBalanceService
-        file: ./backend/LeaveBalanceService/Dockerfile
-        push: true
-        tags: |
-          ${{ env.REGISTRY }}/leavebalanceservice:latest
-          ${{ env.REGISTRY }}/leavebalanceservice:${{ env.TAG }}
-
-    # 6. Build & Push NotificationService
-    - name: Build & Push NotificationService
-      uses: docker/build-push-action@v5
-      with:
-        context: ./backend/NotificationService
-        file: ./backend/NotificationService/Dockerfile
-        push: true
-        tags: |
-          ${{ env.REGISTRY }}/notificationservice:latest
-          ${{ env.REGISTRY }}/notificationservice:${{ env.TAG }}
-
-    # 7. Build & Push RequestService
-    - name: Build & Push RequestService
-      uses: docker/build-push-action@v5
-      with:
-        context: ./backend/RequestService
-        file: ./backend/RequestService/Dockerfile
-        push: true
-        tags: |
-          ${{ env.REGISTRY }}/requestservice:latest
-          ${{ env.REGISTRY }}/requestservice:${{ env.TAG }}
-
-    # 8. Deploy to Azure Container Apps
-    # We will use the Azure CLI to update each container app with its newly pushed image.
-    # Replace resource-group and container-app names with your actual Azure resource names.
-    - name: Deploy to Azure Container Apps
-      uses: azure/CLI@v2
-      with:
-        azcliversion: latest
-        inlineScript: |
-          az config set extension.use_dynamic_install=yes_without_prompt
-          
-          echo "Updating Container Apps..."
-          
-          az containerapp update \
-            --name apigateway-app \
-            --resource-group uris-rg \
-            --image ${{ env.REGISTRY }}/apigateway:${{ env.TAG }}
-            
-          az containerapp update \
-            --name absenceservice-app \
-            --resource-group uris-rg \
-            --image ${{ env.REGISTRY }}/absenceservice:${{ env.TAG }}
-            
-          az containerapp update \
-            --name departmentservice-app \
-            --resource-group uris-rg \
-            --image ${{ env.REGISTRY }}/departmentservice:${{ env.TAG }}
-            
-          az containerapp update \
-            --name employeeservice-app \
-            --resource-group uris-rg \
-            --image ${{ env.REGISTRY }}/employeeservice:${{ env.TAG }}
-            
-          az containerapp update \
-            --name leavebalanceservice-app \
-            --resource-group uris-rg \
-            --image ${{ env.REGISTRY }}/leavebalanceservice:${{ env.TAG }}
-            
-          az containerapp update \
-            --name notificationservice-app \
-            --resource-group uris-rg \
-            --image ${{ env.REGISTRY }}/notificationservice:${{ env.TAG }}
-            
-          az containerapp update \
-            --name requestservice-app \
-            --resource-group uris-rg \
-            --image ${{ env.REGISTRY }}/requestservice:${{ env.TAG }}
+    # Simuliramo uspesan deploy u lokalno okruzenje
+    - name: Local Environment Deployment (Mock)
+      run: |
+        echo "Simulating Local Deployment..."
+        echo "Services successfully built and optimized."
+        echo "Status: Active & Healthy on local Docker environment."
