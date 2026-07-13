@@ -10,11 +10,6 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-    services:
-      # We can also spin up Postgres and RabbitMQ directly using GitHub Actions services, 
-      # or run them via docker-compose as requested.
-      # We'll use docker-compose to start postgres and rabbitmq containers, and shut them down.
-      
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
