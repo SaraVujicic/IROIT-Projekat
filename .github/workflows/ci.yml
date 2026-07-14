@@ -76,8 +76,8 @@ jobs:
     - name: Run Backend Unit & Integration Tests
       env:
         # Menjamo host iz "postgres" u "127.0.0.1" (localhost) za vreme testiranja na GitHub Actions virtuelnoj masini
-        ConnectionStrings__DefaultConnection: "Host=127.0.0.1;Port=5432;Database=DepartmentDb;Username=postgres;Password=postgres"
-        ConnectionStrings__PostgresConnection: "Host=127.0.0.1;Port=5432;Database=DepartmentDb;Username=postgres;Password=postgres"
+        ConnectionStrings__DefaultConnection: "Host=127.0.0.1;Port=5432;Database=DepartmentDb;Username=postgres;Password=postgrespassword"
+        ConnectionStrings__PostgresConnection: "Host=127.0.0.1;Port=5432;Database=DepartmentDb;Username=postgres;Password=postgrespassword"
       run: |
         dotnet test backend/AbsenceService/Absence.slnx --no-build -c Release
         dotnet test backend/DepartmentService/DepartmentService.sln --no-build -c Release
