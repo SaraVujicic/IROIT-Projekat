@@ -16,23 +16,41 @@ public class RequestsControllerTests : IClassFixture<WebApplicationFactory<Progr
     public RequestsControllerTests(WebApplicationFactory<Program> factory)
     {
         _client = factory.WithWebHostBuilder(builder =>
-    {
-        builder.ConfigureServices(services =>
         {
-            var descriptor = services.SingleOrDefault(
-                d => d.ServiceType == typeof(DbContextOptions<RequestDbContext>));
-
-            if (descriptor != null)
+            builder.ConfigureServices(services =>
             {
-                services.Remove(descriptor);
-            }
+                var descriptor = services.SingleOrDefault(
+                    d => d.ServiceType == typeof(DbContextOptions<RequestDbContext>));
 
-            services.AddDbContext<RequestDbContext>(options =>
-            {
-                options.UseInMemoryDatabase("RequestTestDb");
+                if (descriptor != null)
+                {
+                    services.Remove(descriptor);
+                }
+
+                services.AddDbContext<RequestDbContext>(options =>
+                {
+                    options.UseInMemoryDatabase("RequestTestDb");
+                });
+
+                // Mock IEmployeeServiceClient to return true (employee exists) without calling external service
+                var clientDescriptor = services.SingleOrDefault(
+                    d => d.ServiceType == typeof(RequestService.Application.Services.IEmployeeServiceClient));
+                if (clientDescriptor != null)
+                {
+                    services.Remove(clientDescriptor);
+                }
+                services.AddSingleton<RequestService.Application.Services.IEmployeeServiceClient, TestEmployeeServiceClient>();
+
+                // Mock IMessageBus to prevent connection to RabbitMQ
+                var busDescriptor = services.SingleOrDefault(
+                    d => d.ServiceType == typeof(RequestService.Application.Interfaces.IMessageBus));
+                if (busDescriptor != null)
+                {
+                    services.Remove(busDescriptor);
+                }
+                services.AddSingleton<RequestService.Application.Interfaces.IMessageBus, TestMessageBus>();
             });
-        });
-    }).CreateClient();
+        }).CreateClient();
     }
 
     [Fact]
@@ -53,5 +71,21 @@ public class RequestsControllerTests : IClassFixture<WebApplicationFactory<Progr
         response.EnsureSuccessStatusCode();
         var id = await response.Content.ReadFromJsonAsync<int>();
         Assert.True(id > 0);
+    }
+}
+
+public class TestEmployeeServiceClient : RequestService.Application.Services.IEmployeeServiceClient
+{
+    public Task<bool> ValidateEmployeeExistsAsync(int employeeId, CancellationToken cancellationToken)
+    {
+        return Task.FromResult(true);
+    }
+}
+
+public class TestMessageBus : RequestService.Application.Interfaces.IMessageBus
+{
+    public Task PublishAsync<T>(T message, string routingKey, CancellationToken cancellationToken = default)
+    {
+        return Task.CompletedTask;
     }
 }
