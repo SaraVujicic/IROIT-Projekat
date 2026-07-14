@@ -77,7 +77,11 @@ app.MapHealthChecks("/health");
 using (var scope = app.Services.CreateScope())
 {
     var _db = scope.ServiceProvider.GetRequiredService<RequestDbContext>();
-    _db.Database.Migrate();
+
+    if (_db.Database.IsRelational())
+    {
+        _db.Database.Migrate();
+    }
 }
 
 app.Run();

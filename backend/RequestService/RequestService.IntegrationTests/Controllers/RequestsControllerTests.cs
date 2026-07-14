@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using RequestService.Application.Commands.CreateLeaveRequest;
 using RequestService.Domain.Enums;
 using Xunit;
+using RequestService.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace RequestService.IntegrationTests.Controllers;
 
@@ -12,8 +15,24 @@ public class RequestsControllerTests : IClassFixture<WebApplicationFactory<Progr
 
     public RequestsControllerTests(WebApplicationFactory<Program> factory)
     {
-        // Uses InMemory DB configured in DI since connection string is omitted
-        _client = factory.CreateClient();
+        _client = factory.WithWebHostBuilder(builder =>
+    {
+        builder.ConfigureServices(services =>
+        {
+            var descriptor = services.SingleOrDefault(
+                d => d.ServiceType == typeof(DbContextOptions<RequestDbContext>));
+
+            if (descriptor != null)
+            {
+                services.Remove(descriptor);
+            }
+
+            services.AddDbContext<RequestDbContext>(options =>
+            {
+                options.UseInMemoryDatabase("RequestTestDb");
+            });
+        });
+    }).CreateClient();
     }
 
     [Fact]
