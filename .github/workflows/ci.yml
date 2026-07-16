@@ -51,7 +51,7 @@ jobs:
         dotnet restore backend/RequestService/RequestService.sln
         dotnet restore backend/ApiGateway/ApiGateway.csproj
 
-   - name: Begin SonarCloud Analysis
+    - name: Begin SonarCloud Analysis
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
