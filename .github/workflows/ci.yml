@@ -52,13 +52,13 @@ jobs:
         dotnet restore backend/RequestService/RequestService.sln
         dotnet restore backend/ApiGateway/ApiGateway.csproj
 
-    - name: Begin SonarCloud Analysis
+   - name: Begin SonarCloud Analysis
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
         if [ ! -z "$SONAR_TOKEN" ]; then
-          dotnet-sonarscanner begin /k:"SaraVujicic_IROIT-Projekat" /o:"saravujicic" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+          dotnet-sonarscanner begin /k:"SaraVujicic_IROIT-Projekat" /o:"saravujicic" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml"
         else
           echo "SONAR_TOKEN is not set. Skipping SonarScanner begin."
         fi
@@ -79,12 +79,12 @@ jobs:
         ConnectionStrings__DefaultConnection: "Host=127.0.0.1;Port=5432;Database=DepartmentDb;Username=postgres;Password=postgrespassword"
         ConnectionStrings__PostgresConnection: "Host=127.0.0.1;Port=5432;Database=DepartmentDb;Username=postgres;Password=postgrespassword"
       run: |
-        dotnet test backend/AbsenceService/Absence.slnx --no-build -c Release
-        dotnet test backend/DepartmentService/DepartmentService.sln --no-build -c Release
-        dotnet test backend/EmployeeService/EmployeeManagement.sln --no-build -c Release
-        dotnet test backend/LeaveBalanceService/LeaveBalanceService.sln --no-build -c Release
-        dotnet test backend/NotificationService/NotificationService.sln --no-build -c Release
-        dotnet test backend/RequestService/RequestService.sln --no-build -c Release
+        dotnet test backend/AbsenceService/Absence.slnx --no-build -c Release --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+        dotnet test backend/DepartmentService/DepartmentService.sln --no-build -c Release --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+        dotnet test backend/EmployeeService/EmployeeManagement.sln --no-build -c Release --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+        dotnet test backend/LeaveBalanceService/LeaveBalanceService.sln --no-build -c Release --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+        dotnet test backend/NotificationService/NotificationService.sln --no-build -c Release --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+        dotnet test backend/RequestService/RequestService.sln --no-build -c Release --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
 
     - name: End SonarCloud Analysis
       env:
